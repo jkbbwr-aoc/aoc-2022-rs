@@ -1,6 +1,5 @@
+use aoc_runner_derive::{aoc, aoc_generator};
 use std::collections::HashMap;
-use aoc_runner_derive::{aoc_generator, aoc};
-
 
 pub enum Move {
     ROCK,
@@ -14,7 +13,7 @@ impl From<char> for Move {
             'A' | 'X' => Self::ROCK,
             'B' | 'Y' => Self::PAPER,
             'C' | 'Z' => Self::SCISSORS,
-            _ => panic!("unreachable")
+            _ => panic!("unreachable"),
         }
     }
 }
@@ -31,7 +30,7 @@ impl Move {
             (Move::PAPER, 'X') => Move::ROCK,
             (Move::PAPER, 'Y') => Move::PAPER,
             (Move::PAPER, 'Z') => Move::SCISSORS,
-            _ => panic!("unreachable")
+            _ => panic!("unreachable"),
         }
     }
 
@@ -50,7 +49,7 @@ impl Move {
         let shape = match (self) {
             Move::ROCK => 1,
             Move::PAPER => 2,
-            Move::SCISSORS => 3
+            Move::SCISSORS => 3,
         };
         total + shape
     }
@@ -58,26 +57,35 @@ impl Move {
 
 #[aoc_generator(day2)]
 pub fn generator(input: &str) -> Vec<(char, char)> {
-    input.lines().map(|line| {
-        let mut chars = line.as_bytes();
-        (chars[0 as usize] as char, chars[2 as usize] as char)
-    }).collect()
+    input
+        .lines()
+        .map(|line| {
+            let mut chars = line.as_bytes();
+            (chars[0 as usize] as char, chars[2 as usize] as char)
+        })
+        .collect()
 }
 
 #[aoc(day2, part1)]
 pub fn part1(input: &[(char, char)]) -> i32 {
-    input.iter().map(|(left, right)| {
-        let them = Move::from(*left);
-        let us = Move::from(*right);
-        us.score(&them)
-    }).sum()
+    input
+        .iter()
+        .map(|(left, right)| {
+            let them = Move::from(*left);
+            let us = Move::from(*right);
+            us.score(&them)
+        })
+        .sum()
 }
 
 #[aoc(day2, part2)]
 pub fn part2(input: &[(char, char)]) -> i32 {
-    input.iter().map(|(left, right)| {
-        let them = Move::from(*left);
-        let us = them.winner(*right);
-        us.score(&them)
-    }).sum()
+    input
+        .iter()
+        .map(|(left, right)| {
+            let them = Move::from(*left);
+            let us = them.winner(*right);
+            us.score(&them)
+        })
+        .sum()
 }
