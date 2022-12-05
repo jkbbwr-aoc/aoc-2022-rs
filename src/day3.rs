@@ -19,7 +19,7 @@ pub fn part1(input: &str) -> i32 {
                     i += ((*c as u8) - 96) as i32
                 }
             }
-            return i;
+            i
         })
         .sum()
 }
@@ -63,7 +63,7 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"#;
-        assert_eq!(part1(&input), 157);
+        assert_eq!(part1(input), 157);
     }
 
     #[test]
@@ -74,6 +74,6 @@ PmmdzqPrVvPwwTWBwg
 wMqvLMZHhHMvwLHjbvcjnnSBnvTQFn
 ttgJtRGJQctTZtZT
 CrZsJsPPZsGzwwsLwLmpwMDw"#;
-        assert_eq!(part2(&input), 70);
+        assert_eq!(part2(input), 70);
     }
 }

@@ -1,5 +1,4 @@
 use aoc_runner_derive::{aoc, aoc_generator};
-use std::collections::HashMap;
 
 pub enum Move {
     ROCK,
@@ -46,7 +45,7 @@ impl Move {
             (Move::PAPER, Move::PAPER) => 3,
             (Move::PAPER, Move::SCISSORS) => 0,
         };
-        let shape = match (self) {
+        let shape = match self {
             Move::ROCK => 1,
             Move::PAPER => 2,
             Move::SCISSORS => 3,
@@ -60,8 +59,8 @@ pub fn generator(input: &str) -> Vec<(char, char)> {
     input
         .lines()
         .map(|line| {
-            let mut chars = line.as_bytes();
-            (chars[0 as usize] as char, chars[2 as usize] as char)
+            let chars = line.as_bytes();
+            (chars[0_usize] as char, chars[2_usize] as char)
         })
         .collect()
 }
