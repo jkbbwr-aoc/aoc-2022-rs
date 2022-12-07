@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use aoc_runner_derive::{aoc, aoc_generator};
+use std::collections::HashMap;
 use std::ops::{Deref, DerefMut};
 
 #[derive(Debug, Clone)]
@@ -36,7 +36,12 @@ impl Environment {
     pub fn run_simple(&mut self) {
         for instruction in &self.instructions {
             for _ in 1..=instruction.amount {
-                let value = self.stacks.get_mut(&instruction.from).unwrap().pop().unwrap();
+                let value = self
+                    .stacks
+                    .get_mut(&instruction.from)
+                    .unwrap()
+                    .pop()
+                    .unwrap();
                 self.stacks.get_mut(&instruction.to).unwrap().push(value);
             }
         }
@@ -45,8 +50,13 @@ impl Environment {
     pub fn run_advanced(&mut self) {
         for instruction in &self.instructions {
             let outgoing = self.stacks.get_mut(&instruction.from).unwrap();
-            let mut crates = outgoing.drain(outgoing.len() - instruction.amount as usize..).collect::<Vec<char>>();
-            self.stacks.get_mut(&instruction.to).unwrap().append(&mut crates);
+            let mut crates = outgoing
+                .drain(outgoing.len() - instruction.amount as usize..)
+                .collect::<Vec<char>>();
+            self.stacks
+                .get_mut(&instruction.to)
+                .unwrap()
+                .append(&mut crates);
         }
     }
 }
@@ -76,14 +86,20 @@ pub fn generator(input: &str) -> Environment {
         stack.reverse()
     }
 
-    let instructions = raw_instructions.lines().map(|line| {
-        let inst  = line.split(' ').filter_map(|i| i.parse::<i32>().ok()).collect::<Vec<_>>();
-        Instruction {
-            amount: *inst.first().unwrap(),
-            from: *inst.get(1).unwrap(),
-            to: *inst.get(2).unwrap(),
-        }
-    }).collect::<Vec<_>>();
+    let instructions = raw_instructions
+        .lines()
+        .map(|line| {
+            let inst = line
+                .split(' ')
+                .filter_map(|i| i.parse::<i32>().ok())
+                .collect::<Vec<_>>();
+            Instruction {
+                amount: *inst.first().unwrap(),
+                from: *inst.get(1).unwrap(),
+                to: *inst.get(2).unwrap(),
+            }
+        })
+        .collect::<Vec<_>>();
 
     Environment {
         stacks,
@@ -96,9 +112,9 @@ pub fn part1(input: &Environment) -> String {
     let mut env = input.clone(); // Workaround for non mutable input.
     env.run_simple();
     let end = env.stacks.keys().max().unwrap();
-    (1..=*end).map(|i| {
-        env.stacks.get(&i).unwrap().last().unwrap()
-    }).collect::<String>()
+    (1..=*end)
+        .map(|i| env.stacks.get(&i).unwrap().last().unwrap())
+        .collect::<String>()
 }
 
 #[aoc(day5, part2)]
@@ -106,9 +122,9 @@ pub fn part2(input: &Environment) -> String {
     let mut env = input.clone(); // Workaround for non mutable input.
     env.run_advanced();
     let end = env.stacks.keys().max().unwrap();
-    (1..=*end).map(|i| {
-        env.stacks.get(&i).unwrap().last().unwrap()
-    }).collect::<String>()
+    (1..=*end)
+        .map(|i| env.stacks.get(&i).unwrap().last().unwrap())
+        .collect::<String>()
 }
 
 #[cfg(test)]
@@ -116,6 +132,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[ignore]
     fn test_generator() {
         let a = r"    [D]
 [N] [C]
