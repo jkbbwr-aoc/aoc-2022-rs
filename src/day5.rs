@@ -55,7 +55,7 @@ impl Environment {
 pub fn generator(input: &str) -> Environment {
     let mut stacks = Stacks(HashMap::new());
     let sections = input.split("\n\n").collect::<Vec<_>>();
-    let layout = sections.get(0).unwrap();
+    let layout = sections.first().unwrap();
     let raw_instructions = sections.get(1).unwrap();
 
     let mut lines = layout.lines().peekable();
@@ -65,7 +65,7 @@ pub fn generator(input: &str) -> Environment {
                 if item == ' ' {
                     continue;
                 }
-                let stack = stacks.entry((index as i32) + 1).or_insert(Vec::new());
+                let stack = stacks.entry((index as i32) + 1).or_default();
                 stack.push(item);
             }
         }
@@ -77,18 +77,18 @@ pub fn generator(input: &str) -> Environment {
     }
 
     let instructions = raw_instructions.lines().map(|line| {
-        let inst  = line.split(" ").filter_map(|i| i.parse::<i32>().ok()).collect::<Vec<_>>();
+        let inst  = line.split(' ').filter_map(|i| i.parse::<i32>().ok()).collect::<Vec<_>>();
         Instruction {
-            amount: *inst.get(0).unwrap(),
+            amount: *inst.first().unwrap(),
             from: *inst.get(1).unwrap(),
             to: *inst.get(2).unwrap(),
         }
     }).collect::<Vec<_>>();
 
-    return Environment {
+    Environment {
         stacks,
         instructions,
-    };
+    }
 }
 
 #[aoc(day5, part1)]

@@ -1,17 +1,17 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 
 pub enum Move {
-    ROCK,
-    PAPER,
-    SCISSORS,
+    Rock,
+    Paper,
+    Scissors,
 }
 
 impl From<char> for Move {
     fn from(c: char) -> Self {
         match c {
-            'A' | 'X' => Self::ROCK,
-            'B' | 'Y' => Self::PAPER,
-            'C' | 'Z' => Self::SCISSORS,
+            'A' | 'X' => Self::Rock,
+            'B' | 'Y' => Self::Paper,
+            'C' | 'Z' => Self::Scissors,
             _ => panic!("unreachable"),
         }
     }
@@ -20,35 +20,35 @@ impl From<char> for Move {
 impl Move {
     fn winner(&self, goal: char) -> Self {
         match (self, goal) {
-            (Move::ROCK, 'X') => Move::SCISSORS,
-            (Move::ROCK, 'Y') => Move::ROCK,
-            (Move::ROCK, 'Z') => Move::PAPER,
-            (Move::SCISSORS, 'X') => Move::PAPER,
-            (Move::SCISSORS, 'Y') => Move::SCISSORS,
-            (Move::SCISSORS, 'Z') => Move::ROCK,
-            (Move::PAPER, 'X') => Move::ROCK,
-            (Move::PAPER, 'Y') => Move::PAPER,
-            (Move::PAPER, 'Z') => Move::SCISSORS,
+            (Move::Rock, 'X') => Move::Scissors,
+            (Move::Rock, 'Y') => Move::Rock,
+            (Move::Rock, 'Z') => Move::Paper,
+            (Move::Scissors, 'X') => Move::Paper,
+            (Move::Scissors, 'Y') => Move::Scissors,
+            (Move::Scissors, 'Z') => Move::Rock,
+            (Move::Paper, 'X') => Move::Rock,
+            (Move::Paper, 'Y') => Move::Paper,
+            (Move::Paper, 'Z') => Move::Scissors,
             _ => panic!("unreachable"),
         }
     }
 
     fn score(&self, other: &Move) -> i32 {
         let total = match (self, other) {
-            (Move::ROCK, Move::SCISSORS) => 6,
-            (Move::ROCK, Move::ROCK) => 3,
-            (Move::ROCK, Move::PAPER) => 0,
-            (Move::SCISSORS, Move::PAPER) => 6,
-            (Move::SCISSORS, Move::SCISSORS) => 3,
-            (Move::SCISSORS, Move::ROCK) => 0,
-            (Move::PAPER, Move::ROCK) => 6,
-            (Move::PAPER, Move::PAPER) => 3,
-            (Move::PAPER, Move::SCISSORS) => 0,
+            (Move::Rock, Move::Scissors) => 6,
+            (Move::Rock, Move::Rock) => 3,
+            (Move::Rock, Move::Paper) => 0,
+            (Move::Scissors, Move::Paper) => 6,
+            (Move::Scissors, Move::Scissors) => 3,
+            (Move::Scissors, Move::Rock) => 0,
+            (Move::Paper, Move::Rock) => 6,
+            (Move::Paper, Move::Paper) => 3,
+            (Move::Paper, Move::Scissors) => 0,
         };
         let shape = match self {
-            Move::ROCK => 1,
-            Move::PAPER => 2,
-            Move::SCISSORS => 3,
+            Move::Rock => 1,
+            Move::Paper => 2,
+            Move::Scissors => 3,
         };
         total + shape
     }
