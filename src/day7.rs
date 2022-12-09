@@ -1,6 +1,6 @@
 use aoc_runner_derive::{aoc, aoc_generator};
 use std::collections::HashMap;
-use std::path::{PathBuf};
+use std::path::PathBuf;
 
 #[derive(Debug)]
 pub struct File {
