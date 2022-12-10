@@ -10,15 +10,15 @@ impl ToString for Pixel {
     fn to_string(&self) -> String {
         match self {
             Pixel::Lit => "█".into(),
-            Pixel::Dark => " ".into()
+            Pixel::Dark => " ".into(),
         }
     }
 }
 
 #[derive(Debug)]
 struct VM<TrapFn>
-    where
-        TrapFn: FnMut(i32, &mut State) -> (),
+where
+    TrapFn: FnMut(i32, &mut State),
 {
     cycle: i32,
     trap: TrapFn,
@@ -33,8 +33,8 @@ struct State {
 }
 
 impl<TrapFn> VM<TrapFn>
-    where
-        TrapFn: FnMut(i32, &mut State) -> (),
+where
+    TrapFn: FnMut(i32, &mut State),
 {
     fn new(trap: TrapFn) -> Self {
         VM {
@@ -84,7 +84,7 @@ pub enum Instruction {
 pub fn generator(input: &str) -> Vec<Instruction> {
     input
         .lines()
-        .map(|line| match line.trim().split_once(" ") {
+        .map(|line| match line.trim().split_once(' ') {
             Some(("addx", i)) => Instruction::Addx(i.parse().unwrap()),
             None => Instruction::Noop,
             _ => panic!("Invalid instruction."),
@@ -97,31 +97,35 @@ pub fn part1(program: &[Instruction]) -> i32 {
     let mut strength = 0;
     let cycles = [20, 60, 100, 140, 180, 220];
 
-    let vm = VM::new(
-        |cycle, state| if cycles.contains(&cycle) {
+    let vm = VM::new(|cycle, state| {
+        if cycles.contains(&cycle) {
             strength += cycle * state.x;
-        },
-    );
+        }
+    });
     vm.run(program);
     strength
 }
 
 #[aoc(day10, part2)]
 pub fn part2(program: &[Instruction]) -> String {
-    let mut screen = Vec::from([String::new(); 1]);
-    let vm = VM::new(
-        |cycle, state| {
-            if (state.sprite - 1..=state.sprite + 1).contains(&(state.row.len() as i32)) {
-                state.row.push(Pixel::Lit);
-            } else {
-                state.row.push(Pixel::Dark);
-            }
-            if cycle % 40 == 0 {
-                let row = state.row.iter().map(|p| p.to_string()).collect::<Vec<_>>().join("");
-                screen.push(row);
-                state.row.clear();
-            }
-        });
+    let mut screen = Vec::from([String::new(); 1]); // throw an extra empty string so the stdout looks clean
+    let vm = VM::new(|cycle, state| {
+        if (state.sprite - 1..=state.sprite + 1).contains(&(state.row.len() as i32)) {
+            state.row.push(Pixel::Lit);
+        } else {
+            state.row.push(Pixel::Dark);
+        }
+        if cycle % 40 == 0 {
+            let row = state
+                .row
+                .iter()
+                .map(|p| p.to_string())
+                .collect::<Vec<_>>()
+                .join("");
+            screen.push(row);
+            state.row.clear();
+        }
+    });
     vm.run(program);
     screen.join("\n")
 }
@@ -278,6 +282,6 @@ addx -11
 noop
 noop
 noop";
-        println!("{:?}", part1(&generator(&input)));
+        println!("{:?}", part1(&generator(input)));
     }
 }
