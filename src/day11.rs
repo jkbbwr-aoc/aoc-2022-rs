@@ -38,13 +38,13 @@ pub fn generator(input: &str, worry_factor: i128) -> Vec<Monkey> {
         .map(|chunk| {
             let mut lines = chunk.lines();
             let _id_line = lines.next().unwrap();
-            let mut items = lines
+            let items = lines
                 .next()
                 .unwrap()
                 .split_once(": ")
                 .map(|(_, items)| {
                     items
-                        .split(",")
+                        .split(',')
                         .map(|i| i.trim().parse::<i128>().unwrap())
                         .collect::<VecDeque<_>>()
                 })
@@ -53,28 +53,28 @@ pub fn generator(input: &str, worry_factor: i128) -> Vec<Monkey> {
                 .next()
                 .unwrap()
                 .trim()
-                .split(" ")
+                .split(' ')
                 .skip(1)
                 .collect::<Vec<_>>();
             let test_line = lines
                 .next()
                 .unwrap()
                 .trim()
-                .split(" ")
+                .split(' ')
                 .skip(1)
                 .collect::<Vec<_>>();
             let if_true_line = lines
                 .next()
                 .unwrap()
                 .trim()
-                .split(" ")
+                .split(' ')
                 .skip(1)
                 .collect::<Vec<_>>();
             let if_false_line = lines
                 .next()
                 .unwrap()
                 .trim()
-                .split(" ")
+                .split(' ')
                 .skip(1)
                 .collect::<Vec<_>>();
 
@@ -115,13 +115,9 @@ pub fn generator(input: &str, worry_factor: i128) -> Vec<Monkey> {
                 ["new", "=", "old", "*", num] => {
                     if num != "old" {
                         let num = num.parse::<i128>().unwrap();
-                        Box::new(move |i| {
-                            i * num
-                        })
+                        Box::new(move |i| i * num)
                     } else {
-                        Box::new(move |i| {
-                            i * i
-                        })
+                        Box::new(move |i| i * i)
                     }
                 }
                 ["new", "=", "old", "/", num] => {
@@ -205,6 +201,6 @@ Monkey 3:
   Test: divisible by 17
     If true: throw to monkey 0
     If false: throw to monkey 1";
-        println!("{}", part2(&input));
+        println!("{}", part2(input));
     }
 }
