@@ -9,7 +9,7 @@ use std::iter;
 pub enum Packet {
     Value(i32),
     Nested(Vec<Packet>),
-    EOF,
+    Eof,
 }
 
 impl Packet {
@@ -22,7 +22,7 @@ impl Packet {
                 }
                 return a.first().cloned();
             }
-            Packet::EOF => None,
+            Packet::Eof => None,
         };
     }
 }
@@ -62,16 +62,16 @@ fn compare_packets(left: &Packet, right: &Packet) -> Validity {
         (Packet::Value(l), Packet::Value(r)) if l == r => Validity::Continue,
         (Packet::Value(l), Packet::Value(r)) if l < r => Validity::Valid,
         (Packet::Value(l), Packet::Value(r)) if l > r => Validity::Invalid,
-        (Packet::EOF, Packet::EOF) => Validity::Continue,
-        (Packet::EOF, _) => Validity::Valid,
-        (_, Packet::EOF) => Validity::Invalid,
+        (Packet::Eof, Packet::Eof) => Validity::Continue,
+        (Packet::Eof, _) => Validity::Valid,
+        (_, Packet::Eof) => Validity::Invalid,
         (Packet::Nested(l), Packet::Nested(r)) => {
             for (l, r) in l
                 .iter()
-                .chain(iter::repeat(&Packet::EOF))
-                .zip(r.iter().chain(iter::repeat(&Packet::EOF)))
+                .chain(iter::repeat(&Packet::Eof))
+                .zip(r.iter().chain(iter::repeat(&Packet::Eof)))
             {
-                if let (Packet::EOF, Packet::EOF) = (l, r) {
+                if let (Packet::Eof, Packet::Eof) = (l, r) {
                     // We have run out of both iterators together. We need to continue
                     return Validity::Continue;
                 }
@@ -134,10 +134,10 @@ pub fn part2(input: &[(Packet, Packet)]) -> i32 {
         .enumerate()
         .filter_map(|(index, packet)| {
             if let Some(Packet::Value(2)) = packet.unwrap().and_then(|i| i.unwrap()) {
-                println!("{:?} {:?}", index, packet);
+                println!("{index:?} {packet:?}");
                 Some((index + 1) as i32)
             } else if let Some(Packet::Value(6)) = packet.unwrap().and_then(|i| i.unwrap()) {
-                println!("{:?} {:?}", index, packet);
+                println!("{index:?} {packet:?}");
                 Some((index + 1) as i32)
             } else {
                 None

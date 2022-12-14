@@ -3,6 +3,9 @@ name = "aoc-2022-rs"
 version = "0.1.0"
 edition = "2021"
 
+[profile.release]
+debug = true
+
 [lib]
 bench = false
 

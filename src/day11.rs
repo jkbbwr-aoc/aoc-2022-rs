@@ -1,6 +1,6 @@
 use aoc_runner_derive::aoc;
 use std::collections::VecDeque;
-use std::ops::Fn;
+use std::ops::{Div, Fn, Sub};
 
 pub struct Monkey {
     items: VecDeque<i128>,
@@ -15,7 +15,7 @@ fn round(index: usize, monkeys: &mut [Monkey]) {
     let (monkey, end) = end.split_first_mut().unwrap();
     while let Some(item) = monkey.items.pop_front() {
         monkey.inspections += 1;
-        let worry = (monkey.op)(item) as i128;
+        let worry = (monkey.op)(item);
         let worry = worry / monkey.worry_factor;
         let worry = if monkey.worry_factor == 1 {
             worry % 9699690 // what the fuck?
@@ -109,7 +109,7 @@ pub fn generator(input: &str, worry_factor: i128) -> Vec<Monkey> {
                         let num = num.parse::<i128>().unwrap();
                         Box::new(move |i| i - num)
                     } else {
-                        Box::new(move |i| i - i)
+                        Box::new(move |i| i.sub(i))
                     }
                 }
                 ["new", "=", "old", "*", num] => {
@@ -125,7 +125,7 @@ pub fn generator(input: &str, worry_factor: i128) -> Vec<Monkey> {
                         let num = num.parse::<i128>().unwrap();
                         Box::new(move |i| i / num)
                     } else {
-                        Box::new(move |i| i / i)
+                        Box::new(move |i| i.div(i))
                     }
                 }
                 _ => panic!("wtf"),
